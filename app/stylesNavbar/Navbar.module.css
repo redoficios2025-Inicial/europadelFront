@@ -1,0 +1,525 @@
+/* ======= CORRECCIÓN GLOBAL 🔥 ======= */
+html,
+body {
+  width: 100%;
+  overflow-x: hidden; /* evita barra de scroll horizontal en toda la página */
+}
+
+
+/* ============================================
+   NAVBAR - Estilo Paddle Professional con imagen
+   ============================================ */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: linear-gradient(135deg, rgba(102,126,234,0.7) 0%, rgba(118,75,162,0.7) 100%);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 30px rgba(102, 126, 234, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   CONTENEDOR
+   ============================================ */
+
+.navbarContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* ============================================
+   LOGO
+   ============================================ */
+
+.navbarLogo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.navbarLogo:hover {
+  transform: scale(1.05);
+}
+
+.logoImage {
+  width: 60px;
+  object-fit: cover;
+  height: 60px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+  transition: box-shadow 0.3s ease;
+}
+
+.logoImage:hover {
+  box-shadow: 0 6px 25px rgba(168, 85, 247, 0.6);
+}
+
+.logoText {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ffffff 0%, #f0e7ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+/* ============================================
+   DESKTOP MENU
+   ============================================ */
+
+.navbarMenu {
+  display: none;
+  align-items: center;
+  gap: 2rem;
+}
+
+.desktopMenu {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .desktopMenu {
+    display: flex;
+  }
+}
+
+.navLink {
+  position: relative;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+}
+
+.navLink::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #a855f7, #ec4899);
+  transform: translateX(-50%);
+  transition: width 0.3s ease;
+}
+
+.navLink:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.navLink:hover::before {
+  width: 80%;
+}
+
+.btnRegister {
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+  padding: 0.65rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+  border: 2px solid transparent;
+}
+
+.btnRegister:hover {
+  background: linear-gradient(135deg, #9333ea 0%, #db2777 100%);
+  box-shadow: 0 6px 25px rgba(168, 85, 247, 0.6);
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================
+   USER MENU
+   ============================================ */
+
+.userMenu {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* resto del CSS se mantiene igual, sin tocar */
+
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.userAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.userName {
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.2px;
+}
+
+.userRole {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+.btnLogout {
+  background: rgba(239, 68, 68, 0.2);
+  color: white;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  padding: 0.5rem 1.25rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btnLogout:hover {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: rgba(239, 68, 68, 0.6);
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   HAMBURGER MENU
+   ============================================ */
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 1100;
+  transition: transform 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .hamburger {
+    display: none;
+  }
+}
+
+.hamburger span {
+  width: 28px;
+  height: 3px;
+  background: white;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(8px, 8px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(8px, -8px);
+}
+
+.hamburger:hover {
+  transform: scale(1.1);
+}
+
+
+/* ============================================
+   MOBILE MENU — corregido
+   ============================================ */
+.mobileMenu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 80%;
+  max-width: 320px;
+  height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.5rem;
+  gap: 1.2rem;
+  z-index: 1050;
+  transition: right 0.3s ease-in-out;
+  overflow-y: auto;
+}
+
+.mobileMenu.active {
+  right: 0;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  z-index: 1040;
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ============================================
+   LINKS DEL MENÚ MÓVIL
+   ============================================ */
+.mobileLink {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.mobileLink:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateX(10px);
+}
+
+.mobileLinkHighlight {
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.mobileLinkHighlight:hover {
+  background: linear-gradient(135deg, #9333ea 0%, #db2777 100%);
+  transform: translateX(10px) scale(1.02);
+}
+
+/* ============================================
+   INFO DE USUARIO MÓVIL
+   ============================================ */
+.mobileUserInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: 1rem;
+}
+
+.mobileUserAvatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.3rem;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.mobileUserName {
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.mobileUserRole {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+/* ============================================
+   BOTÓN CERRAR SESIÓN
+   ============================================ */
+.mobileBtnLogout {
+  width: 100%;
+  background: rgba(239, 68, 68, 0.2);
+  color: white;
+  border: 2px solid rgba(239, 68, 68, 0.4);
+  padding: 1rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: auto;
+  backdrop-filter: blur(10px);
+}
+
+.mobileBtnLogout:hover {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: rgba(239, 68, 68, 0.6);
+  transform: scale(1.02);
+}
+
+
+/* ============================================
+   OVERLAY
+   ============================================ */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 1040;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .navbarContainer { padding: 1rem 1.5rem; }
+  .logoText { font-size: 1.3rem; }
+}
+
+@media (max-width: 480px) {
+  .navbarContainer { padding: 0.75rem 1rem; }
+  .logoImage { width: 35px; height: 35px; }
+  .logoText { font-size: 1.2rem; }
+  .mobileMenu { width: 90%; }
+}
+
+/* ============================================
+   SCROLLBARS & ANIMACIONES
+   ============================================ */
+
+:global(.mobileMenu::-webkit-scrollbar) { width: 6px; }
+:global(.mobileMenu::-webkit-scrollbar-track) {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+:global(.mobileMenu::-webkit-scrollbar-thumb) {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+:global(.mobileMenu::-webkit-scrollbar-thumb:hover) {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Animación de salida */
+@keyframes slideOutRight {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(100%); opacity: 0; }
+}
+
+.mobileMenu.closing {
+  animation: slideOutRight 0.3s ease forwards;
+}
+
+.overlay.closing {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+
+.mobileMenu.active .mobileLink,
+.mobileMenu.active .mobileUserInfo,
+.mobileMenu.active .mobileBtnLogout {
+  animation: slideInRight 0.3s ease forwards;
+}
+
+.mobileMenu.active .mobileLink:nth-child(1) { animation-delay: 0.1s; }
+.mobileMenu.active .mobileLink:nth-child(2) { animation-delay: 0.2s; }
+.mobileMenu.active .mobileLink:nth-child(3) { animation-delay: 0.3s; }
+.mobileMenu.active .mobileUserInfo { animation-delay: 0.4s; }
+.mobileMenu.active .mobileBtnLogout { animation-delay: 0.5s; }
+
+/* ============================================
+   ACCESIBILIDAD
+   ============================================ */
+
+:global(*:focus-visible),
+:global(.navLink:focus-visible),
+:global(.mobileLink:focus-visible),
+:global(.btnRegister:focus-visible),
+:global(.btnLogout:focus-visible),
+:global(.mobileBtnLogout:focus-visible) {
+  outline: 3px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(*),
+  :global(*::before),
+  :global(*::after) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
