@@ -4,8 +4,7 @@ import { Edit2, Trash2, Plus, X, Save, Search, Filter, Star, Package, DollarSign
 import { useRouter } from 'next/navigation';
 import { useUser } from '../components/userContext';
 
-const API_URL = 'https://padel-back-kohl.vercel.app/api/productosadmin';
-const AUTH_URL = 'https://padel-back-kohl.vercel.app/api/auth/login';
+const API_URL = 'https://padel-back-kohl.vercel.app/api/productosadmin/unico';
 
 interface ProductoAdminForm {
     _id?: string;
@@ -883,3 +882,4 @@ export default function AdminProductosFijo() {
         </div>
     );
 }
+
