@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useUser } from '../components/userContext';
 
 const API_URL = 'https://padel-back-kohl.vercel.app/api/productosadmin/unico';
-
 interface ProductoAdminForm {
     _id?: string;
     stock: string;
@@ -882,4 +881,5 @@ export default function AdminProductosFijo() {
         </div>
     );
 }
+
 
