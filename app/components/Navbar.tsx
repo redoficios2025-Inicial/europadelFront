@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
         <div className={stylesNavbar.navbarContainer}>
           <Link href="/">
             <div className={stylesNavbar.navbarLogo}>
-              <img src="/assets/padeljona.jpg" alt="Logo" className={stylesNavbar.logoImage} />
+              <img src="/assets/europadel2.jpg" alt="Logo" className={stylesNavbar.logoImage} />
             </div>
           </Link>
         </div>
@@ -165,3 +165,4 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
+
