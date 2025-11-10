@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { FaWhatsapp, FaSearch, FaArrowLeft, FaStar, FaFilter, FaShoppingCart } from 'react-icons/fa';
+import styles from '../stylesPage/page.module.css';
 
 const API_URL = 'https://padel-back-kohl.vercel.app/api/productos-publicos';
 
@@ -133,9 +134,9 @@ export default function ProductosPage() {
   const productosFiltrados = productos.filter((p: Producto) => {
     const term = filtros.buscar.toLowerCase();
     return p.nombre.toLowerCase().includes(term) ||
-           p.marca.toLowerCase().includes(term) ||
-           p.descripcion.toLowerCase().includes(term) ||
-           p.codigo.toLowerCase().includes(term);
+      p.marca.toLowerCase().includes(term) ||
+      p.descripcion.toLowerCase().includes(term) ||
+      p.codigo.toLowerCase().includes(term);
   });
 
   if (loading) {
@@ -290,11 +291,10 @@ export default function ProductosPage() {
                     )}
                     {/* Precio sobre imagen */}
                     <div className="absolute bottom-4 right-4">
-                      <div className={`px-6 py-3 rounded-2xl font-black text-2xl shadow-2xl ${
-                        producto.moneda === 'USD' 
-                          ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white' 
+                      <div className={`px-6 py-3 rounded-2xl font-black text-2xl shadow-2xl ${producto.moneda === 'USD'
+                          ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white'
                           : 'bg-white text-purple-600'
-                      }`}>
+                        }`}>
                         {formatearPrecio(precioConDescuento, producto.moneda)}
                       </div>
                     </div>
@@ -313,11 +313,8 @@ export default function ProductosPage() {
                       </span>
                     </div>
 
-                    {producto.descuento > 0 && (
-                      <div className="text-gray-400 line-through text-sm mb-1">
-                        {formatearPrecio(precioSinDescuento, producto.moneda)}
-                      </div>
-                    )}
+                    {producto.descuento > 0 && <div className={styles.precioTachado}>{formatearPrecio(precioSinDescuento, producto.moneda)}</div>}
+
 
                     <h3 className="text-xl font-bold text-gray-800 mb-2 line-clamp-2">
                       {producto.nombre}
@@ -325,10 +322,6 @@ export default function ProductosPage() {
 
                     <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                       {producto.descripcion}
-                    </p>
-
-                    <p className="text-xs text-gray-400 mb-4">
-                      Código: {producto.codigo}
                     </p>
 
                     {/* Botones */}
@@ -429,9 +422,8 @@ export default function ProductosPage() {
                   )}
                 </div>
 
-                <div className={`text-4xl font-black mb-6 ${
-                  productoDetalle.moneda === 'USD' ? 'text-green-600' : 'text-purple-600'
-                }`}>
+                <div className={`text-4xl font-black mb-6 ${productoDetalle.moneda === 'USD' ? 'text-green-600' : 'text-purple-600'
+                  }`}>
                   {formatearPrecio(productoDetalle.precioFinal, productoDetalle.moneda)}
                 </div>
 
