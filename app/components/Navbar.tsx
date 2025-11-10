@@ -125,7 +125,7 @@ const Navbar: React.FC = () => {
               <Link href="/productosall" className={stylesNavbar.mobileLink} onClick={closeMenu}>Productos</Link>
 
               {/* Vendedores y admins */}
-              {(user.rol === "admin" || user.rol === "vendedor") && (
+              {(user.rol === "vendedor") && (
                 <Link href="/crear-producto" className={stylesNavbar.mobileLink} onClick={closeMenu}>Crear Producto</Link>
               )}
 
@@ -165,6 +165,7 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
+
 
 
 
