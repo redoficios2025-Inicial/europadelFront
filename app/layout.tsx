@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     description: "Sistema de gestión de productos para casa de deportes",
     images: [
       {
-        url: "/assets/europadel.jpg",
+        url: "/assets/europadel2.jpg",
         width: 1200,
         height: 630,
         alt: "Casa de Deportes - EuropaDel",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Casa de Deportes - Sistema de Gestión",
     description: "Sistema de gestión de productos para casa de deportes",
-    images: ["/assets/europadel.jpg"],
+    images: ["/assets/europadel2.jpg"],
   },
 };
 
