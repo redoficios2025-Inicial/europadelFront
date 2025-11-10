@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useUser } from '../components/userContext';
 
 const API_URL = 'https://padel-back-kohl.vercel.app/api/productosadmin';
+const AUTH_URL = 'https://padel-back-kohl.vercel.app/api/auth/login';
 
 interface ProductoAdminForm {
     _id?: string;
@@ -40,7 +41,6 @@ interface ProductoAdmin {
 }
 
 interface Login {
-    id: string;
     email: string;
     password: string;
 }
@@ -66,7 +66,7 @@ const initialForm: ProductoAdminForm = {
 
 export default function AdminProductosFijo() {
     const [isAuth, setIsAuth] = useState<boolean>(false);
-    const [login, setLogin] = useState<Login>({ id: '', email: '', password: '' });
+    const [login, setLogin] = useState<Login>({ email: '', password: '' });
     const [error, setError] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [form, setForm] = useState<ProductoAdminForm>(initialForm);
@@ -83,23 +83,57 @@ export default function AdminProductosFijo() {
     const router = useRouter();
 
     useEffect(() => {
-        if (sessionStorage.getItem('isAuthenticatedAdmin') === 'true') setIsAuth(true);
+        const token = sessionStorage.getItem('authTokenAdmin');
+        if (token) {
+            setIsAuth(true);
+        }
     }, []);
 
     useEffect(() => {
         if (isAuth) cargar();
     }, [isAuth]);
 
-    const handleLogin = () => {
+    // ✅ CAMBIO 2: Login real contra tu API
+    const handleLogin = async () => {
         setLoading(true);
         setError('');
-        if (login.id === 'admin123' && login.email === 'admin@padel.com' && login.password === 'admin123456') {
-            sessionStorage.setItem('isAuthenticatedAdmin', 'true');
-            sessionStorage.setItem('authTokenAdmin', 'ADMIN_TOKEN_2024');
-            setTimeout(() => { setLoading(false); setIsAuth(true); }, 500);
-        } else {
+        
+        try {
+            const response = await fetch(AUTH_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: login.email,
+                    password: login.password,
+                }),
+            });
+
+            const data = await response.json();
+            
+            if (response.ok && data.success && data.token) {
+                // ✅ Verificar que el usuario sea admin
+                if (data.user.rol !== 'admin') {
+                    setError('❌ Acceso denegado: Solo administradores pueden acceder');
+                    setLoading(false);
+                    return;
+                }
+
+                // ✅ Guardar el JWT real
+                sessionStorage.setItem('authTokenAdmin', data.token);
+                sessionStorage.setItem('isAuthenticatedAdmin', 'true');
+                
+                console.log('✅ Login exitoso como admin');
+                setIsAuth(true);
+            } else {
+                setError(data.message || '❌ Credenciales incorrectas');
+            }
+        } catch (err) {
+            console.error('Error en login:', err);
+            setError('❌ Error de conexión con el servidor');
+        } finally {
             setLoading(false);
-            setError('Credenciales incorrectas - Solo acceso ADMIN');
         }
     };
 
@@ -110,15 +144,39 @@ export default function AdminProductosFijo() {
         reset();
     };
 
+    // ✅ CAMBIO 3: Headers correctos en todas las peticiones
+    const getAuthHeaders = () => {
+        const token = sessionStorage.getItem('authTokenAdmin');
+        return {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        };
+    };
+
     const cargar = async () => {
         try {
+            console.log('📥 Cargando productos...');
             const res = await fetch(API_URL, {
-                headers: { 'Authorization': `Bearer ${sessionStorage.getItem('authTokenAdmin')}` }
+                method: 'GET',
+                headers: getAuthHeaders(),
             });
+            
             const data = await res.json();
-            if (data.success) setProductos(data.data);
+            console.log('Respuesta del servidor:', data);
+            
+            if (data.success) {
+                setProductos(data.data || []);
+                console.log('✅ Productos cargados:', data.data?.length);
+            } else {
+                console.error('❌ Error al cargar:', data.message);
+                if (res.status === 401) {
+                    alert('Sesión expirada. Por favor inicia sesión nuevamente.');
+                    logout();
+                }
+            }
         } catch (e) {
-            console.error(e);
+            console.error('❌ Error de conexión:', e);
+            alert('Error al cargar productos. Verifica tu conexión.');
         }
     };
 
@@ -149,18 +207,25 @@ export default function AdminProductosFijo() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
+        
         try {
+            console.log('📤 Enviando producto...');
+            const payload = {
+                ...form,
+                id: editMode ? form._id : undefined,
+                precioAdminFijo: parseFloat(form.precioAdminFijo),
+                stock: parseInt(form.stock),
+            };
+
             const res = await fetch(API_URL, {
                 method: editMode ? 'PUT' : 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('authTokenAdmin')}` },
-                body: JSON.stringify({
-                    ...form,
-                    id: editMode ? form._id : undefined,
-                    precioAdminFijo: parseFloat(form.precioAdminFijo),
-                    stock: parseInt(form.stock),
-                }),
+                headers: getAuthHeaders(),
+                body: JSON.stringify(payload),
             });
+            
             const data = await res.json();
+            console.log('Respuesta:', data);
+            
             if (data.success) {
                 alert(editMode ? '✅ Producto actualizado!' : '✅ Producto creado y notificado a vendedores!');
 
@@ -171,8 +236,14 @@ export default function AdminProductosFijo() {
 
                 reset();
                 await cargar();
-            } else alert('❌ Error: ' + data.message);
+            } else {
+                alert('❌ Error: ' + data.message);
+                if (res.status === 401) {
+                    logout();
+                }
+            }
         } catch (err) {
+            console.error('❌ Error:', err);
             alert('❌ Error de conexión');
         } finally {
             setLoading(false);
@@ -194,12 +265,15 @@ export default function AdminProductosFijo() {
     const eliminar = async (id: string) => {
         if (!confirm('⚠️ ¿Estás seguro de eliminar este producto?')) return;
         setLoading(true);
+        
         try {
             const res = await fetch(`${API_URL}?id=${id}`, {
                 method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${sessionStorage.getItem('authTokenAdmin')}` }
+                headers: getAuthHeaders(),
             });
+            
             const data = await res.json();
+            
             if (data.success) {
                 alert('✅ Producto eliminado!');
                 await cargar();
@@ -207,6 +281,7 @@ export default function AdminProductosFijo() {
                 alert('❌ Error: ' + data.message);
             }
         } catch (err) {
+            console.error('❌ Error:', err);
             alert('❌ Error de conexión');
         } finally {
             setLoading(false);
@@ -246,20 +321,8 @@ export default function AdminProductosFijo() {
                         </div>
                         <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Panel ADMIN</h1>
                         <p className="text-gray-600">Gestión de Productos con Precio Fijo</p>
-
                     </div>
-                    <div className="space-y-4">
-                        <div>
-                            <label className="block text-sm font-semibold mb-2 text-gray-700">ID Admin</label>
-                            <input
-                                type="text"
-                                value={login.id}
-                                onChange={e => setLogin(p => ({ ...p, id: e.target.value }))}
-                                required
-                                placeholder="admin123"
-                                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 outline-none transition text-gray-900"
-                            />
-                        </div>
+                    <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }} className="space-y-4">
                         <div>
                             <label className="block text-sm font-semibold mb-2 text-gray-700">Email Admin</label>
                             <input
@@ -283,13 +346,13 @@ export default function AdminProductosFijo() {
                             />
                         </div>
                         {error && <div className="bg-red-50 border-l-4 border-red-500 text-red-700 px-4 py-3 rounded-lg text-sm">{error}</div>}
-                        <button onClick={handleLogin} disabled={loading} className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold disabled:opacity-50 hover:shadow-lg transition transform hover:scale-105">
+                        <button type="submit" disabled={loading} className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold disabled:opacity-50 hover:shadow-lg transition transform hover:scale-105">
                             {loading ? 'Verificando...' : 'Acceder como Admin'}
                         </button>
-                    </div>
+                    </form>
                     <div className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl text-xs border border-purple-100">
-                        <p className="font-semibold mb-2 text-purple-900">Credenciales de Admin:</p>
-                        <p className="text-gray-700">ID: <strong>admin123</strong> | Email: <strong>admin@padel.com</strong> | Pass: <strong>admin123456</strong></p>
+                        <p className="font-semibold mb-2 text-purple-900">⚠️ Usa tus credenciales de admin reales</p>
+                        <p className="text-gray-700">Debes tener una cuenta registrada con rol admin en tu base de datos</p>
                     </div>
                 </div>
             </div>
@@ -328,6 +391,7 @@ export default function AdminProductosFijo() {
                 </div>
 
                 <form className="bg-white rounded-2xl p-4 sm:p-6 md:p-8 mb-4 sm:mb-8 shadow-lg border border-purple-100" onSubmit={handleSubmit}>
+                    {/* ... resto del formulario igual ... */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                         <div>
                             <label className="block mb-2 font-semibold text-xs sm:text-sm flex items-center gap-2 text-gray-700">
@@ -515,6 +579,7 @@ export default function AdminProductosFijo() {
                     </div>
                 </form>
 
+                {/* Resto del componente igual... filtros, lista de productos, modales */}
                 <div className="bg-white rounded-2xl p-4 sm:p-6 mb-4 sm:mb-6 shadow-lg border border-purple-100">
                     <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
                         <div>
